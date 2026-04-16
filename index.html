@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💍 For You</title>
+<title>💖 For You</title>
 
 <style>
 body {
     margin: 0;
-    font-family: 'Arial';
+    font-family: Arial;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -22,33 +22,44 @@ body {
     text-align: center;
     padding: 30px;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     border-radius: 20px;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.18);
     backdrop-filter: blur(12px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    animation: fadeIn 1s ease;
+}
+
+/* IMAGE */
+img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-bottom: 10px;
 }
 
 /* TEXT */
 h1 {
     color: white;
-    font-size: 28px;
+    font-size: 26px;
 }
 
 p {
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 /* BUTTONS */
 button {
-    padding: 12px 20px;
-    margin: 10px;
+    padding: 12px 18px;
+    margin: 8px;
     border: none;
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
 button:hover {
@@ -58,15 +69,24 @@ button:hover {
 #yes {
     background: #ff4d6d;
     color: white;
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 #no {
     background: #333;
     color: white;
+    position: relative;
 }
 
-/* floating hearts */
+/* MESSAGE */
+#msg {
+    display: none;
+    margin-top: 15px;
+    font-size: 22px;
+    color: white;
+}
+
+/* HEARTS */
 .heart {
     position: absolute;
     animation: float 4s linear forwards;
@@ -77,17 +97,9 @@ button:hover {
     100% {transform: translateY(-10vh);}
 }
 
-/* shake effect */
-.shake {
-    animation: shake 0.3s;
-}
-
-@keyframes shake {
-    0% {transform: translateX(0);}
-    25% {transform: translateX(-5px);}
-    50% {transform: translateX(5px);}
-    75% {transform: translateX(-5px);}
-    100% {transform: translateX(0);}
+@keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
 }
 
 </style>
@@ -97,11 +109,16 @@ button:hover {
 
 <div class="card">
 
-<h1>💍 Will You Be My Valentine?</h1>
-<p id="status">Try to say NO 😏 (5 times needed)</p>
+<!-- 📸 SELFIE -->
+<img src="selfie.jpg" alt="us">
+
+<h1>💖 Will You Be My Valentine?</h1>
+<p id="status">Say NO 5 times first 😏</p>
 
 <button id="yes" disabled onclick="yesClick()">Yes 💖</button>
 <button id="no" onclick="noClick()">No 😜</button>
+
+<div id="msg">💖 I knew it... Love you ❤️</div>
 
 </div>
 
@@ -110,45 +127,37 @@ button:hover {
 let noClicks = 0;
 let yesBtn = document.getElementById("yes");
 let statusText = document.getElementById("status");
+let msg = document.getElementById("msg");
 let noBtn = document.getElementById("no");
 
 function noClick() {
-
     noClicks++;
 
-    // shake effect
-    noBtn.classList.add("shake");
-    setTimeout(() => noBtn.classList.remove("shake"), 300);
-
-    if (noClicks < 5) {
-        statusText.innerHTML = `😏 Nope not enough... (${noClicks}/5)`;
-    }
+    statusText.innerText = `😏 Try again (${noClicks}/5)`;
 
     if (noClicks >= 5) {
-        statusText.innerHTML = "😳 Okay... now you can say YES";
+        statusText.innerText = "😳 Okay fine... you can say YES now!";
         yesBtn.disabled = false;
         yesBtn.style.opacity = "1";
 
-        // now NO starts escaping
+        // NO starts escaping AFTER unlock
         noBtn.onmouseover = moveNo;
     }
 }
 
 function moveNo() {
-    let x = Math.random() * (window.innerWidth - 120);
-    let y = Math.random() * (window.innerHeight - 60);
-
     noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
 }
 
 function yesClick() {
-    document.body.innerHTML = "<h1 style='color:white;font-size:40px;'>💖 She Said YES 💖</h1>";
+    msg.style.display = "block";
+    document.body.style.background = "linear-gradient(135deg, #ff4d6d, #ff9a9e)";
     startHearts();
 }
 
-// hearts
+/* hearts */
 function createHeart() {
     let h = document.createElement("div");
     h.className = "heart";
