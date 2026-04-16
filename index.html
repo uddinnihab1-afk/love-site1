@@ -8,22 +8,45 @@
 body {
     margin: 0;
     padding: 0;
-    text-align: center;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    text-align: center;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     overflow: hidden;
 }
 
-h1 {
-    margin-top: 100px;
-    font-size: 40px;
-    color: white;
+/* glass card */
+.card {
+    margin-top: 70px;
+    display: inline-block;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 2s ease;
 }
 
+/* title */
+h1 {
+    color: white;
+    font-size: 40px;
+}
+
+/* image */
+img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    margin: 15px;
+    animation: pop 2s ease;
+}
+
+/* buttons */
 button {
     padding: 12px 25px;
     font-size: 18px;
-    margin: 15px;
+    margin: 10px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -35,14 +58,23 @@ button:hover {
 }
 
 #yes {
-    background-color: #ff4d6d;
+    background: #ff4d6d;
     color: white;
 }
 
 #no {
-    background-color: #444;
+    background: #333;
     color: white;
     position: absolute;
+}
+
+/* love message */
+#message {
+    display: none;
+    font-size: 32px;
+    color: white;
+    margin-top: 20px;
+    animation: fadeIn 2s ease;
 }
 
 /* floating hearts */
@@ -52,25 +84,58 @@ button:hover {
     animation: float 5s linear infinite;
 }
 
+/* animations */
 @keyframes float {
     0% {transform: translateY(100vh);}
     100% {transform: translateY(-10vh);}
 }
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes pop {
+    from {transform: scale(0);}
+    to {transform: scale(1);}
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>Will you be my Valentine? 💖</h1>
+<!-- 🎵 MUSIC -->
+<audio autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/02/22/audio_d0d1b6b1c2.mp3?filename=romantic-112191.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+
+<h1 id="title">Hey My Love ❤️</h1>
+
+<!-- 📸 PHOTO -->
+<img src="https://i.imgur.com/1Q9Z1Zm.jpeg" alt="love">
+
+<h2 style="color:white;">Will you be my Valentine? 💖</h2>
 
 <button id="yes" onclick="yesClick()">Yes 💘</button>
 <button id="no" onmouseover="moveNo()">No 😜</button>
 
+<div id="message">I Love You Forever ❤️😍</div>
+
+</div>
+
 <script>
+
+// ❤️ YES CLICK
 function yesClick() {
-    document.body.innerHTML = "<h1>I Love You ❤️😍</h1>";
+    document.getElementById("message").style.display = "block";
+    document.getElementById("title").innerText = "Yayyy ❤️ She Said YES!";
+    startHearts();
 }
 
+// 😜 MOVE NO BUTTON
 function moveNo() {
     let btn = document.getElementById("no");
 
@@ -81,7 +146,7 @@ function moveNo() {
     btn.style.top = y + "px";
 }
 
-// create floating hearts
+// ❤️ FLOATING HEARTS
 function createHeart() {
     let heart = document.createElement("div");
     heart.className = "heart";
@@ -97,7 +162,14 @@ function createHeart() {
     }, 5000);
 }
 
+// auto hearts
 setInterval(createHeart, 300);
+
+// extra hearts after YES
+function startHearts() {
+    setInterval(createHeart, 150);
+}
+
 </script>
 
 </body>
