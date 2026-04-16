@@ -8,21 +8,36 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    text-align: center;
+    font-family: 'Arial';
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     overflow: hidden;
 }
 
 /* CARD */
 .card {
-    margin-top: 80px;
-    display: inline-block;
-    padding: 25px;
-    background: rgba(0,0,0,0.3);
+    text-align: center;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
     border-radius: 20px;
-    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* TEXT */
+h1 {
     color: white;
+    font-size: 28px;
+}
+
+p {
+    color: white;
+    margin-bottom: 20px;
 }
 
 /* BUTTONS */
@@ -30,33 +45,49 @@ button {
     padding: 12px 20px;
     margin: 10px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
 }
 
 #yes {
     background: #ff4d6d;
     color: white;
     opacity: 0.4;
-    cursor: not-allowed;
 }
 
 #no {
     background: #333;
     color: white;
-    position: relative;
 }
 
-/* HEARTS */
+/* floating hearts */
 .heart {
     position: absolute;
-    animation: float 5s linear infinite;
+    animation: float 4s linear forwards;
 }
 
 @keyframes float {
     0% {transform: translateY(100vh);}
     100% {transform: translateY(-10vh);}
+}
+
+/* shake effect */
+.shake {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% {transform: translateX(0);}
+    25% {transform: translateX(-5px);}
+    50% {transform: translateX(5px);}
+    75% {transform: translateX(-5px);}
+    100% {transform: translateX(0);}
 }
 
 </style>
@@ -66,11 +97,10 @@ button {
 
 <div class="card">
 
-<h2>💍 Will You Be Mine?</h2>
+<h1>💍 Will You Be My Valentine?</h1>
+<p id="status">Try to say NO 😏 (5 times needed)</p>
 
-<h3 id="status">❌ First convince me 😏</h3>
-
-<button id="yes" onclick="yesClick()" disabled>Yes 💖</button>
+<button id="yes" disabled onclick="yesClick()">Yes 💖</button>
 <button id="no" onclick="noClick()">No 😜</button>
 
 </div>
@@ -80,60 +110,56 @@ button {
 let noClicks = 0;
 let yesBtn = document.getElementById("yes");
 let statusText = document.getElementById("status");
+let noBtn = document.getElementById("no");
 
-// NO BUTTON CLICK LOGIC
 function noClick() {
+
     noClicks++;
 
+    // shake effect
+    noBtn.classList.add("shake");
+    setTimeout(() => noBtn.classList.remove("shake"), 300);
+
     if (noClicks < 5) {
-        statusText.innerHTML = "😏 Try harder... (" + noClicks + "/5)";
+        statusText.innerHTML = `😏 Nope not enough... (${noClicks}/5)`;
     }
 
-    // after 5 clicks unlock yes + enable movement
     if (noClicks >= 5) {
-        statusText.innerHTML = "😳 Okay okay... now try saying YES!";
+        statusText.innerHTML = "😳 Okay... now you can say YES";
         yesBtn.disabled = false;
         yesBtn.style.opacity = "1";
-        yesBtn.style.cursor = "pointer";
 
-        moveNoButton();
+        // now NO starts escaping
+        noBtn.onmouseover = moveNo;
     }
 }
 
-// MOVE NO BUTTON (after unlock)
-function moveNoButton() {
-    let btn = document.getElementById("no");
+function moveNo() {
+    let x = Math.random() * (window.innerWidth - 120);
+    let y = Math.random() * (window.innerHeight - 60);
 
-    btn.onmouseover = function () {
-        let x = Math.random() * (window.innerWidth - 100);
-        let y = Math.random() * (window.innerHeight - 50);
-
-        btn.style.position = "absolute";
-        btn.style.left = x + "px";
-        btn.style.top = y + "px";
-    }
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
 }
 
-// YES CLICK
 function yesClick() {
-    if (yesBtn.disabled) return;
-
-    document.body.innerHTML = "<h1 style='color:white;margin-top:200px;'>💖 She Said YES 💖</h1>";
+    document.body.innerHTML = "<h1 style='color:white;font-size:40px;'>💖 She Said YES 💖</h1>";
     startHearts();
 }
 
-// HEARTS
+// hearts
 function createHeart() {
     let h = document.createElement("div");
     h.className = "heart";
     h.innerHTML = "❤️";
     h.style.left = Math.random() * 100 + "vw";
     document.body.appendChild(h);
-    setTimeout(() => h.remove(), 5000);
+    setTimeout(() => h.remove(), 4000);
 }
 
 function startHearts() {
-    setInterval(createHeart, 150);
+    setInterval(createHeart, 120);
 }
 
 </script>
